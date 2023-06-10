@@ -2,6 +2,7 @@ package com.boluo.groundedsegmentanythingbackend.service.impl;
 
 import cn.hutool.core.date.DateTime;
 import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
+import com.boluo.groundedsegmentanythingbackend.domain.Result;
 import com.boluo.groundedsegmentanythingbackend.domain.dto.SImagesDto;
 import com.boluo.groundedsegmentanythingbackend.domain.entity.PImages;
 import com.boluo.groundedsegmentanythingbackend.domain.entity.SImages;
@@ -13,7 +14,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 /**
-* @author kirit
+* @author kirito
 * @description 针对表【p_images(用于存放图片路径等)】的数据库操作Service实现
 * @createDate 2023-06-10 14:23:36
 */
@@ -30,7 +31,7 @@ public class PImagesServiceImpl extends ServiceImpl<PImagesMapper, PImages>
 
     @Transactional
     @Override
-    public void insert(SImagesDto sImagesDto, String pname, String url1, String url2, DateTime date) {
+    public Result insert(SImagesDto sImagesDto, String pname, String url1, String url2, DateTime date) {
         PImages pImages = new PImages();
         pImages.setImageName(pname);
         pImages.setUrl(url1);
@@ -46,6 +47,7 @@ public class PImagesServiceImpl extends ServiceImpl<PImagesMapper, PImages>
         sImages.setCreateTime(date);
         int insert1 = sImagesMapper.insert(sImages);
 
+        return Result.ok().data("pImages",pImages).data("sImages",sImages);
     }
 }
 

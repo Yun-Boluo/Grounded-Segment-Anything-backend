@@ -115,11 +115,11 @@ public class MinioUtils {
 
 
 
-        minioClient.putObject(
-                PutObjectArgs.builder().bucket(bucketName).object(fileName).stream(
-                                file.getInputStream(), file.getSize(), -1)
-                        .contentType(file.getContentType())
-                        .build());
+        minioClient.putObject(PutObjectArgs.builder().bucket(bucketName)
+                .object(fileName)
+                .stream(file.getInputStream(), file.getSize(), -1)
+                .contentType(file.getContentType())
+                .build());
         String url = minioProperties.getEndpoint() + "/" + bucketName + "/" + fileName;
         return url;
     }
@@ -146,21 +146,23 @@ public class MinioUtils {
 
         //开始上传
         log.info("file压缩前大小:{}",file.getSize());
-
-        if (file.getSize() > maxSize) {
-            FileItemFactory fileItemFactory = new DiskFileItemFactory();
-            FileItem fileItem = fileItemFactory.createItem(fileName, "text/plain", true, fileName);
-            OutputStream outputStream = fileItem.getOutputStream();
-            Thumbnails.of(file.getInputStream()).scale(1f).outputFormat(originalFilename.substring(originalFilename.lastIndexOf(".")+1)).outputQuality(0.25f).toOutputStream(outputStream);
-            file = new CommonsMultipartFile(fileItem);
-        }
+//
+//        if (file.getSize() > maxSize) {
+//            FileItemFactory fileItemFactory = new DiskFileItemFactory();
+//            FileItem fileItem = fileItemFactory.createItem(fileName, "text/plain", true, fileName);
+//            OutputStream outputStream = fileItem.getOutputStream();
+//            Thumbnails.of(file.getInputStream()).scale(1f).outputFormat(originalFilename.substring(originalFilename.lastIndexOf(".")+1)).outputQuality(0.25f).toOutputStream(outputStream);
+//            file = new CommonsMultipartFile(fileItem);
+//        }
 
         log.info("file压缩后大小:{}",file.getSize());
 
 
         minioClient.putObject(
-                PutObjectArgs.builder().bucket(bucketName).object(fileName).stream(
-                                file.getInputStream(), file.getSize(), -1)
+                PutObjectArgs.builder()
+                        .bucket(bucketName)
+                        .object(fileName)
+                        .stream(file.getInputStream(), file.getSize(), -1)
                         .contentType(file.getContentType())
                         .build());
         String url = minioProperties.getEndpoint() + "/" + bucketName + "/" + fileName;

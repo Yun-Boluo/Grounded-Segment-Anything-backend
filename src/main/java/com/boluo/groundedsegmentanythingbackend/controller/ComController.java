@@ -50,22 +50,30 @@ public class ComController {
      * @return
      */
     @PostMapping("/upload")
-    public Result uplodFile(@RequestParam("file") MultipartFile file, @RequestParam("sImagesDto")SImagesDto sImagesDto){
+    public Result uplodFile(@RequestPart("file") MultipartFile file, @RequestPart("sImagesDto")SImagesDto sImagesDto){
+        String fileName = file.getOriginalFilename();
+        int index = fileName.lastIndexOf(".");
+        // test.jpg -> .jpg
+        String fileType = fileName.substring(index);
+
+        String pPath = fileSave2Local(file,fileType);
+
         // 1. 生成存放的名称
-        String pname = UUID.randomUUID().toString().replaceAll("-", "");
-        String sname = UUID.randomUUID().toString().replaceAll("-", "");
+        String pname = UUID.randomUUID().toString().replaceAll("-", "")+fileType;
+        String sname = UUID.randomUUID().toString().replaceAll("-", "")+fileType;
+
 
         // 2. 上传python 返回生成图片的路径
-        APIDto apiDto = new APIDto(fileSave2Local(file),sImagesDto);
+        APIDto apiDto = new APIDto(pPath,sImagesDto);
         String path = api.comWithPython(apiDto);
         String url1 = null;
         String url2 = null;
         // 3. 调用minio并返回url
         try {
             // 上传父
-            url1 = minioUtils.uploadFile(file, "demo", pname);
+            url1 = minioUtils.uploadFile(python.getInputPath()+"\\"+ pPath, "demo", pname);
             // 上传子
-            url2 = minioUtils.uploadFile(python.getOutput() + path, "demo", sname);
+            url2 = minioUtils.uploadFile(python.getOutput() +"\\"+ path, "demo", sname);
         } catch (Exception e) {
             throw new RuntimeException(e);
         }
@@ -74,20 +82,17 @@ public class ComController {
         Assert.assertNotNull(date);
 
         // 4. 将数据存入数据库
-        pImagesService.insert(sImagesDto, pname, url1, url2, date);
-        return Result.ok();
+
+        return pImagesService.insert(sImagesDto, pname, url1, url2, date);
     }
 
 
     // 将图片存储到本地并保存
-    public String fileSave2Local(MultipartFile file){
+    public String fileSave2Local(MultipartFile file,String fileType){
         if (file.isEmpty()) {
             return "a.jpg";
         }
-        String fileName = file.getOriginalFilename();
-        int index = fileName.lastIndexOf(".");
-        // test.jpg -> .jpg
-        String fileType = fileName.substring(index);
+
         File dest = new File(new File(python.getInputPath()).getAbsolutePath()+ "/" + "a"+fileType);
         if (!dest.getParentFile().exists()) {
             dest.getParentFile().mkdirs();

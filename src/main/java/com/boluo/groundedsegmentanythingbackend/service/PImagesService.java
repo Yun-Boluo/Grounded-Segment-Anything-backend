@@ -1,6 +1,7 @@
 package com.boluo.groundedsegmentanythingbackend.service;
 
 import cn.hutool.core.date.DateTime;
+import com.boluo.groundedsegmentanythingbackend.domain.Result;
 import com.boluo.groundedsegmentanythingbackend.domain.dto.SImagesDto;
 import com.boluo.groundedsegmentanythingbackend.domain.entity.PImages;
 import com.baomidou.mybatisplus.extension.service.IService;
@@ -12,5 +13,5 @@ import com.baomidou.mybatisplus.extension.service.IService;
 */
 public interface PImagesService extends IService<PImages> {
 
-    void insert(SImagesDto sImagesDto, String pname, String url1, String url2, DateTime date);
+    Result insert(SImagesDto sImagesDto, String pname, String url1, String url2, DateTime date);
 }
