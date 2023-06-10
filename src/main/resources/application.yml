@@ -1,0 +1,31 @@
+spring:
+  application:
+    name: GroundedSegmentAnything
+  servlet:
+    multipart:
+      max-request-size: 200MB
+      max-file-size: 200MB
+  datasource:
+    url: jdbc:mysql://localhost:3306/grounded_segment_anything
+    username: root
+    password: 123456
+    driverClassName: com.mysql.cj.jdbc.Driver
+  aop:
+    auto: true
+server:
+  port: 8080
+
+
+#minio配置
+minio:
+  endpoint: http://localhost:9001               # minio 的url
+  accessKey: minio                              # userName
+  secretKey: minio@123456                       # password
+  bucketName: demo                              # bucket name
+
+
+python:
+  evn: C:\develop\anaconda\conda3\python.exe
+  workPath: E:\githubDemo\GroundingDINO\main.py
+  inputPath: E:\githubDemo\GroundingDINO\weights
+  outputPath: E:\githubDemo\GroundingDINO\output

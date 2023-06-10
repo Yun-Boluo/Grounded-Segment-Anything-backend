@@ -1,0 +1,22 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.boluo.groundedsegmentanythingbackend.mapper.SImagesMapper">
+
+    <resultMap id="BaseResultMap" type="com.boluo.groundedsegmentanythingbackend.domain.entity.SImages">
+            <id property="id" column="id" jdbcType="BIGINT"/>
+            <result property="url" column="url" jdbcType="VARCHAR"/>
+            <result property="createTime" column="create_time" jdbcType="TIMESTAMP"/>
+            <result property="pid" column="pid" jdbcType="BIGINT"/>
+            <result property="textPrompt" column="text_prompt" jdbcType="VARCHAR"/>
+            <result property="boxTreshold" column="box_treshold" jdbcType="VARCHAR"/>
+            <result property="textTreshold" column="text_treshold" jdbcType="VARCHAR"/>
+    </resultMap>
+
+    <sql id="Base_Column_List">
+        id,url,create_time,
+        pid,text_prompt,box_treshold,
+        text_treshold
+    </sql>
+</mapper>
