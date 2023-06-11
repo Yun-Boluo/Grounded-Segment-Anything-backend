@@ -7,6 +7,7 @@ import com.boluo.groundedsegmentanythingbackend.api.dto.APIDto;
 import com.boluo.groundedsegmentanythingbackend.domain.Result;
 import com.boluo.groundedsegmentanythingbackend.domain.dto.SImagesDto;
 import com.boluo.groundedsegmentanythingbackend.domain.python.Python;
+import com.boluo.groundedsegmentanythingbackend.service.CommonService;
 import com.boluo.groundedsegmentanythingbackend.service.PImagesService;
 import com.boluo.groundedsegmentanythingbackend.utils.MinioUtils;
 import junit.framework.Assert;
@@ -43,8 +44,12 @@ public class ComController {
     @Autowired
     private PImagesService pImagesService;
 
+
+    @Autowired
+    private CommonService commonService;
+
     /**
-     *
+     * 上传
      * @param file
      * @param sImagesDto
      * @return
@@ -86,6 +91,15 @@ public class ComController {
         return pImagesService.insert(sImagesDto, pname, url1, url2, date);
     }
 
+    /**
+     *  查询所有样例返回
+     * @return
+     */
+    @PostMapping("/searchAll")
+    public Result searchAll(){
+        return commonService.searchAll();
+    }
+
 
     // 将图片存储到本地并保存
     public String fileSave2Local(MultipartFile file,String fileType){
@@ -106,5 +120,6 @@ public class ComController {
         }
 
     }
+
 
 }
