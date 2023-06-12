@@ -29,6 +29,7 @@ import java.util.UUID;
 @RestController
 @RequestMapping("/common")
 @Slf4j
+@CrossOrigin
 public class ComController {
 
     @Resource
@@ -51,12 +52,15 @@ public class ComController {
     /**
      * 上传
      * @param file
-     * @param sImagesDto
      * @return
      */
+    @CrossOrigin
     @PostMapping("/upload")
-    public Result uplodFile(@RequestPart("file") MultipartFile file, @RequestPart("sImagesDto")SImagesDto sImagesDto){
+    public Result uplodFile(@RequestParam("file") MultipartFile file, @RequestParam("textPrompt") String textPrompt,
+                            @RequestParam("boxTreshold") String boxTreshold,@RequestParam("textTreshold") String textTreshold){
+        SImagesDto  sImagesDto = new SImagesDto(textPrompt,boxTreshold, textTreshold);
         String fileName = file.getOriginalFilename();
+        assert fileName != null;
         int index = fileName.lastIndexOf(".");
         // test.jpg -> .jpg
         String fileType = fileName.substring(index);
@@ -108,15 +112,19 @@ public class ComController {
         }
 
         File dest = new File(new File(python.getInputPath()).getAbsolutePath()+ "/" + "a"+fileType);
+
         if (!dest.getParentFile().exists()) {
             dest.getParentFile().mkdirs();
         }
+        if (dest.exists()) {
+            dest.delete();
+        }
         try {
             file.transferTo(dest); // 保存文件
-            return new StringBuilder().append("a").append(fileType).toString();
+            return "a" + fileType;
         } catch (Exception e) {
             e.printStackTrace();
-            return "a.jpg";
+            return "a" + fileType;
         }
 
     }
